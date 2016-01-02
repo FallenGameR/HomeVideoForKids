@@ -1,3 +1,10 @@
+Videos:
 https://science.dirty.ru/sbornik-khoroshikh-nauchno-populiarnykh-filmov-483007/
 http://www.blogimam.com/2013/07/obuchayushhee-video-dlya-detej-top-20-detskix-peredach/
 http://www.blogimam.com/2013/04/razvivayushhie-i-poznavatelnye-multfilmy/
+
+Create chrome on different monitor:
+https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multiple-displays/
+
+MoveWindows programatically:
+https://github.com/rlbisbe/WinResize
