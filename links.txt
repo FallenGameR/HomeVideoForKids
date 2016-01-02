@@ -8,3 +8,30 @@ https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multi
 
 MoveWindows programatically:
 https://github.com/rlbisbe/WinResize
+
+
+
+https://www.youtube.com/embed/9YhRvxhEojg?autoplay=1
+
+https://www.youtube.com/tv#/watch?v=9YhRvxhEojg
+
+
+https://www.youtube.com/tv#/watch?v=FO9CMvSa8fI&list=UUpNzWUlO6PVb_v7chefBnig
+
+https://developers.google.com/youtube/2.0/developers_guide_protocol_playlists?hl=en
+
+how to track playlist location?
+
+
+https://www.youtube.com/watch?v=G-PVXnStfa4&list=UUpNzWUlO6PVb_v7chefBnig&index=10&shuffle=2090
+
+
+http://www.youtube.com/embed/videoseries?list=UUpNzWUlO6PVb_v7chefBnig&index=7
+
+# generate random 
+    https://www.youtube.com/tv#/videoseries?list=UUpNzWUlO6PVb_v7chefBnig&index=1
+
+chronological order
+
+You should open any video of the channel you want to watch and add this text to the end of the url of that video:
+&feature=mfu_in_order&list=UL
