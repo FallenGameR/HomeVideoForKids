@@ -35,14 +35,16 @@ while( $response.nextPageToken )
 }
 
 
+$parsed = foreach( $item in $results.items.snippet )
+{
+    [PSCustomObject] [ordered] @{
+        position = $item.position
+        videoId = $item.resourceId.videoId
+        seen = $false
+        published = [datetimeoffset]::Parse($item.publishedAt)
+        title = $item.title
+        description = ($item.description -split "`r?`n" | foreach trim | where{ $psitem }) -join ". " -replace "\.\.", "."
+    }
+}
 
-
-
-
-
-$a = Invoke-RestMethod $query
-$a.items
-$a.items.snippet
-
-
-
+$parsed | sort published | Export-Csv .\galileo.csv -NoTypeInformation -NoOverwrite -Encoding UTF8
