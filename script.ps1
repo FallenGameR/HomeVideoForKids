@@ -1,23 +1,39 @@
-Add-Type –assemblyName WindowsBase
-Add-Type –assemblyName PresentationCore
-Add-Type –assemblyName PresentationFramework
+Add-Type –AssemblyName WindowsBase
+Add-Type –AssemblyName PresentationCore
+Add-Type –AssemblyName PresentationFramework
 
 [xml]$xaml = @'
-<Window
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="UAT" Height="300" Width="300">
-    <Grid>
-        <Button Name="btnGo" Content="Go" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="207,240,0,0"/>
-        <TextBox Name="txtOut" HorizontalAlignment="Left" Height="233" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="272" Margin="10,0,0,0"/>
-    </Grid>
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        SizeToContent="WidthAndHeight"
+        MinWidth="300"
+        Title="Видео">
+    <Window.Resources>
+        <Style TargetType="{x:Type Control}" x:Key="defaultStyle">
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultStyle}" />
+    </Window.Resources>
+    <StackPanel x:Name="stack">
+        <Label x:Name="lblTimer" FontSize="35" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button x:Name="btnGo">
+            test
+        </Button>
+    </StackPanel>
 </Window>
 '@
 
-$reader=(New-Object Xml.XmlNodeReader $xaml)
-$MainForm=[Windows.Markup.XamlReader]::Load( $reader )
+$form = [Windows.Markup.XamlReader]::Load( (New-Object Xml.XmlNodeReader $xaml) )
+$xaml.SelectNodes("//*[@Name]") | foreach{ Set-Variable -Name $psitem.Name -Value $form.FindName($psitem.Name) -Scope Global }
 
-$xaml.SelectNodes("//*[@Name]") | %{Set-Variable -Name ($_.Name) -Value $MainForm.FindName($_.Name) -Scope Global}
+
+
+$stack.Children.Add( New-Object System.Windows.Controls.Button -Property @{ Content = "test me" } )
+$stack.Children.Add( New-Object System.Windows.Controls.Button -Property @{ Content = "Галилео" } )
+
+
+
 
 $btnGo.add_Click({
     $txtOut.text = ""
@@ -27,35 +43,12 @@ $btnGo.add_Click({
     $txtOut.background = $imagebrush
 })
 
-$MainForm.ShowDialog() | out-null
+$form.ShowDialog() | Out-Null
 
 
 
 
 <#
-<Window x:Class="WpfApplication1.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApplication1"
-        mc:Ignorable="d"
-        SizeToContent="WidthAndHeight"
-        Title="MainWindow">
-    <Window.Resources>
-        <Style TargetType="{x:Type Control}" x:Key="defaultStyle">
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="Margin" Value="2"/>
-        </Style>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultStyle}" />
-    </Window.Resources>
-    <StackPanel x:Name="stack">
-        <Label x:Name="lblTimer" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button>
-            test
-        </Button>
-    </StackPanel>
-</Window>
 
 
 
@@ -73,19 +66,13 @@ namespace WpfApplication1
     {
         DateTime timerStart;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            DispatcherTimer timer = new DispatcherTimer();
+             [System.Windows.Threading.DispatcherTimer] timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.1);
             timer.Tick += Timer_Tick;
 
             timerStart = DateTime.Now;
             timer.Start();
 
-            stack.Children.Add(new Button { Content = "test me" });
-            stack.Children.Add(new Button { Content = "Галилео" });
         }
 
         private void Timer_Tick(object sender, EventArgs e)
