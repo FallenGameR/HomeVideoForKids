@@ -32,4 +32,68 @@ $MainForm.ShowDialog() | out-null
 
 
 
+<#
+<Window x:Class="WpfApplication1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication1"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="MainWindow">
+    <Window.Resources>
+        <Style TargetType="{x:Type Control}" x:Key="defaultStyle">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultStyle}" />
+    </Window.Resources>
+    <StackPanel x:Name="stack">
+        <Label x:Name="lblTimer" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button>
+            test
+        </Button>
+    </StackPanel>
+</Window>
 
+
+
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+
+namespace WpfApplication1
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        DateTime timerStart;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.1);
+            timer.Tick += Timer_Tick;
+
+            timerStart = DateTime.Now;
+            timer.Start();
+
+            stack.Children.Add(new Button { Content = "test me" });
+            stack.Children.Add(new Button { Content = "Галилео" });
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            var elapsed = DateTime.Now - timerStart;
+            lblTimer.Content = elapsed.ToString(@"hh\:mm\:ss");
+        }
+    }
+}
+
+#>
