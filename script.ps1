@@ -7,6 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
         MinWidth="300"
         Title="Video">
     <Window.Resources>
@@ -44,14 +45,28 @@ foreach( $item in $lists )
         Content = $item.Name
     }
     $button.add_Click({
+        # Prepare timer
         if( -not $GLOBAL:timerStart )
         {
             $GLOBAL:timerStart = [datetime]::Now
         }
 
-        Write-Host "hi!"
-        $item.Content | Get-Random
-        Write-Host "hi!" ($item.Content | Get-Random)
+        # Cleaning up
+        #Get-Process chrome -ea Ignore | kill
+
+        # Prepare Chrome
+        $chromePath = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
+        $chromeArguments = '--new-window'
+        $chromeStartDelay = 3 # if window not moved (especially on machine start) - try increaing the delay
+        Set-Location $PSScriptRoot
+        . .\HelperFunctions.ps1
+
+        # Get URL to show
+        $video = $item.Content | Get-Random
+        $url = "https://www.youtube.com/embed/$($video.VideoId)?autoplay=1"
+
+        # Show video on second monitor
+        Chrome-Kiosk $url -MonitorNum 2
     })
     $stack.Children.Add( $button ) | Out-Null
 }

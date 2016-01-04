@@ -10,7 +10,7 @@ https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multi
 [Play video full screen]
 https://www.youtube.com/tv#/watch?v=VKYcJji_wYU
 After it ends auto-continue with related video.
-Better funn screen controls.
+Better full screen controls.
 
 https://www.youtube.com/embed/YTSH1Mt59sM?autoplay=1
 After ends it shows tiles of similar videos.
