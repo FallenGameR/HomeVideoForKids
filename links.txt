@@ -8,11 +8,11 @@ https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multi
 
 
 [Play video full screen]
-https://www.youtube.com/tv#/watch?v=B3xE9dSnlgw
+https://www.youtube.com/tv#/watch?v=VKYcJji_wYU
 After it ends auto-continue with related video.
 Better funn screen controls.
 
-https://www.youtube.com/embed/9YhRvxhEojg?autoplay=1
+https://www.youtube.com/embed/YTSH1Mt59sM?autoplay=1
 After ends it shows tiles of similar videos.
 
 [Start first video from list]
@@ -41,18 +41,6 @@ how to track playlist location?
 
 Invoke-RestMethod -uri "https://gdata.youtube.com/feeds/api/videos?v=2&q=Desired+State+Configuration+PowerShell" 
 
-The following command lists each video by title, author, and link:
 
-Invoke-RestMethod -uri "https://gdata.youtube.com/feeds/api/videos?v=2&q=Desired+State+Configuration+PowerShell" | 
-foreach {[PSCustomObject]@{Title=$_.Title; Author=$_.author.name; Link=$_.content.src}} | Format-List
-
-Prefer a function for your profile?
-
-function Get-DSCVideos {
-
-Invoke-RestMethod -uri "https://gdata.youtube.com/feeds/api/videos?v=2&q=Desired+State+Configuration+PowerShell" | 
-foreach {[PSCustomObject]@{Title=$_.Title; Author=$_.author.name; Link=$_.content.src}} | Format-List }
-
- 
 
 
