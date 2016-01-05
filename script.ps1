@@ -5,15 +5,13 @@ Add-Type -AssemblyName PresentationCore
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName Microsoft.VisualBasic
-
 Add-Type -Path Tomin.Tools.KioskMode.dll
-
 $WinAPI = [Tomin.Tools.KioskMode.WinApi]
 $Helpers = [Tomin.Tools.KioskMode.Helper]
 
 function Get-ChromeHandle( [switch] $wait )
 {
-    Write-Host "peaking"
+    Write-Debug "peaking"
     $window = Get-Process -Name chrome -ea Ignore | where MainWindowTitle
 
     if( $wait )
@@ -22,7 +20,7 @@ function Get-ChromeHandle( [switch] $wait )
         {
             Start-Sleep -Seconds 0.1
             $window = Get-Process -Name chrome -ea Ignore | where MainWindowTitle
-            Write-Host "searching"
+            Write-Debug "searching"
         }
     }
 
@@ -101,23 +99,23 @@ foreach( $item in $lists )
 
         # Cleaning up
         Get-ChromeHandle | foreach {
-            Write-Host "killing $psitem"
+            Write-Debug "killing $psitem"
             $Helpers::SendKey($psitem, '%{F4}')
             while( Get-Process chrome -ea Ignore )
             {
-                Write-Host "waiting for kill $psitem"
+                Write-Debug "waiting for kill $psitem"
                 Start-Sleep -Seconds 0.1
             }
         }
 
         # Show video on second monitor
-        Write-Host "starting"
+        Write-Debug "starting"
         Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $Url"
         Get-ChromeHandle -Wait | foreach {
-            Write-Host "moving $psitem"
+            Write-Debug "moving $psitem"
             $WinAPI::ShowWindow($psitem, [Tomin.Tools.KioskMode.Enums.ShowWindowCommands]::Restore)
             $Helpers::MoveToMonitor($psitem, 2)
-            Write-Host "enlarging $psitem"
+            Write-Debug "enlarging $psitem"
             $Helpers::SendKey($psitem, '{F11}')
         }
     })
