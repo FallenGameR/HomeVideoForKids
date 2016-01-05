@@ -24,10 +24,7 @@ function Get-ChromeHandle( [switch] $wait )
         }
     }
 
-    if( $window )
-    {
-        $window.MainWindowHandle
-    }
+    $window.MainWindowHandle
 }
 
 # Build basic form
@@ -93,9 +90,10 @@ foreach( $item in $lists )
         }
 
         # Getting video to show
-        $video = $item.Content | Get-Random
+        $video = $item.Content | where seen -ne "True" | Get-Random
         $url = "https://www.youtube.com/embed/$($video.VideoId)?autoplay=1"
         $txtDescription.Text = $video.title + "`r`n" + $video.description
+        $txtDescription.Visibility = "Visible"
 
         # Cleaning up
         Get-ChromeHandle | foreach {
@@ -110,7 +108,7 @@ foreach( $item in $lists )
 
         # Show video on second monitor
         Write-Debug "starting"
-        Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $Url"
+        Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $url"
         Get-ChromeHandle -Wait | foreach {
             Write-Debug "moving $psitem"
             $WinAPI::ShowWindow($psitem, [Tomin.Tools.KioskMode.Enums.ShowWindowCommands]::Restore)
@@ -118,6 +116,10 @@ foreach( $item in $lists )
             Write-Debug "enlarging $psitem"
             $Helpers::SendKey($psitem, '{F11}')
         }
+
+        # Updating video metadata
+        $video.seen = $true
+        $item.Content | Export-Csv $item.FilePath -NoTypeInformation -Force -Encoding UTF8
     })
     $stack.Children.Add( $button ) | Out-Null
 }
