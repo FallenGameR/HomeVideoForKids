@@ -24,7 +24,10 @@ function Get-ChromeHandle( [switch] $wait )
         }
     }
 
-    $window.MainWindowHandle
+    if( $window )
+    {
+        $window.MainWindowHandle
+    }
 }
 
 # Build basic form

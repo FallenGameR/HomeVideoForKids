@@ -1,7 +1,25 @@
 [Videos]
-https://science.dirty.ru/sbornik-khoroshikh-nauchno-populiarnykh-filmov-483007/
-http://www.blogimam.com/2013/07/obuchayushhee-video-dlya-detej-top-20-detskix-peredach/
-http://www.blogimam.com/2013/04/razvivayushhie-i-poznavatelnye-multfilmy/
+    Галилео
+
+    Твои весёлые друзья зверята
+    https://www.youtube.com/watch?v=EbnoYuaeO0Q&list=PL-O2q2H53tkOdtNkKzNkPp8NAd1pRMMP8
+
+    Школа волшебства - нужно парсить список видео
+    https://www.youtube.com/user/ilyalarionov/videos
+
+    Фиксики
+    https://www.youtube.com/watch?v=0hm3QODDMv4&list=PL0C60546EB06D619A
+
+    Жили были первооткрыватели
+    https://www.youtube.com/watch?v=_eKmivvK5kI&list=PLQ8VHQOds3XyYp2JKNalc9HHy3rxlQ8X_&index=7
+
+    Аты баты
+    https://www.youtube.com/watch?v=s5ZX1a0KvMc&index=4&list=PLWXt8KyvwqhLi5rpD5922SkxH6NQh095r
+
+    Пора в космос
+    https://www.youtube.com/playlist?list=PLZWRqXyJ1LsA2TqSNltmB4ofJ_vFmCukJ
+
+
 
 [Create chrome window on different monitor]
 https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multiple-displays/
