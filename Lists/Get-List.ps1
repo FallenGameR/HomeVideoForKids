@@ -1,14 +1,17 @@
 # Dumps all gallileo video to csv file
 # position, videoId, seen, published, title, description (trimmed),
-
-
-
-
+param
+(
+    # "UUpNzWUlO6PVb_v7chefBnig" Галилео
+    # "PL-O2q2H53tkOdtNkKzNkPp8NAd1pRMMP8" Твои весёлые друзья зверята
+    $playlist,
+    # "Зверята.csv"
+    $output = "Output.csv"
+)
 
 # Key is from shelltube project
 # TODO: create a separate key for application
 $key = "AIzaSyCrb1f-QjPwO9w-sB6qQTNdQ-vEdjMx7Ek"
-$playlist = "UUpNzWUlO6PVb_v7chefBnig"
 
 $parameters = [ordered] @{
     part = "snippet"
@@ -21,7 +24,7 @@ $parameters = [ordered] @{
 $parametersText = ($parameters.Keys | where{ $parameters.$psitem } | foreach{ "$psitem=$($parameters.$psitem)" }) -join "&"
 $query = "https://www.googleapis.com/youtube/v3/playlistItems?$parametersText"
 
-# about 8 seconds in total
+# about 8 seconds in total for galileo
 $results = @()
 $response = Invoke-RestMethod $query
 $results += $response
@@ -36,7 +39,6 @@ while( $response.nextPageToken )
     $results += $response
 }
 
-
 $parsed = foreach( $item in $results.items.snippet )
 {
     [PSCustomObject] [ordered] @{
@@ -49,4 +51,4 @@ $parsed = foreach( $item in $results.items.snippet )
     }
 }
 
-$parsed | sort published | Export-Csv .\galileo.csv -NoTypeInformation -NoOverwrite -Encoding UTF8
+$parsed | sort published | Export-Csv $output -NoTypeInformation -NoOverwrite -Encoding UTF8
