@@ -9,8 +9,6 @@
     Школа волшебства - нужно парсить список видео
     https://www.youtube.com/user/ilyalarionov/videos
 
-Make sure it works with several lists
-Shortcut
 школа волшебства
 kill other instances
 what to do when all entries are seen?

@@ -1,3 +1,5 @@
+$DebugPreference = "Continue"
+
 # Dependencies
 Set-Location $PSScriptRoot
 Add-Type -AssemblyName WindowsBase
