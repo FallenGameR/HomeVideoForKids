@@ -132,7 +132,7 @@ foreach( $item in $lists )
 
             while( -not (Get-ChromeHandle) )
             {
-                if( ([datetime]::now - $runStarted) -gt [timespan]::Parse("00:00:05") )
+                if( ([datetime]::now - $runStarted) -gt [timespan]::Parse("00:00:03") )
                 {
                     break
                 }
