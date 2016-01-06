@@ -110,7 +110,7 @@ foreach( $item in $lists )
         $video = $list.Content | where seen -ne "True" | Get-Random
         $url = "https://www.youtube.com/embed/$($video.VideoId)?autoplay=1"
         $txtDescription.Text = $video.title + "`r`n" + $video.description
-        $txtDescription.Visibility = "Visible"
+        $scroll.Visibility = "Visible"
 
         # Cleaning up
         Get-ChromeHandle | foreach {
@@ -151,9 +151,14 @@ $txtDescription = New-Object System.Windows.Controls.TextBlock -Property @{
     MaxWidth = "300"
     TextWrapping = "Wrap"
     Margin = "10"
+
+$scroll = New-Object System.Windows.Controls.ScrollViewer -Property @{
+    MaxHeight = "200"
     Visibility = "Collapsed"
 }
-$stack.Children.Add( $txtDescription ) | Out-Null
+
+$scroll.AddChild( $txtDescription ) | Out-Null
+$stack.Children.Add( $scroll ) | Out-Null
 
 # Showing form to the user
 $form.ShowDialog() | Out-Null
