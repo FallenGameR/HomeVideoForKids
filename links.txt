@@ -5,9 +5,7 @@
     Жили были первооткрыватели
     Аты баты
     Пора в космос
-
-    Школа волшебства - нужно парсить список видео
-    https://www.youtube.com/user/ilyalarionov/videos
+    Школа волшебства - нужно парсить список видео - UU-3Pifrk-FZOorhBa20WOKw
 
 школа волшебства
 kill other instances
