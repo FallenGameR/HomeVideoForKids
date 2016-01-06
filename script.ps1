@@ -1,5 +1,8 @@
 $DebugPreference = "Continue"
 
+# Making sure there are no other instances running
+Get-Process powershell | where Id -ne $pid | kill
+
 # Dependencies
 Set-Location $PSScriptRoot
 Add-Type -AssemblyName WindowsBase
@@ -38,6 +41,7 @@ function Get-ChromeHandle( [switch] $wait )
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
         MinWidth="300"
         Title="Video">
     <Window.Resources>
@@ -60,10 +64,14 @@ $lblTimer = $form.FindName("lblTimer")
 # Reading data
 $lists = foreach( $file in ls $PSScriptRoot\Lists\*.csv )
 {
-    [PsCustomObject] @{
-        Name = $file.BaseName
-        FilePath = $file.FullName
-        Content = Import-Csv $file.FullName
+    $content = Import-Csv $file.FullName
+    if( $content | where seen -ne "True" | select -First 1 )
+    {
+        [PsCustomObject] @{
+            Name = $file.BaseName
+            FilePath = $file.FullName
+            Content = $content
+        }
     }
 }
 
@@ -95,7 +103,8 @@ foreach( $item in $lists )
         }
 
         # Finding corresponding list
-        $list = $lists | where Name -eq $args[0].Name
+        $button = $args[0]
+        $list = $lists | where Name -eq $button.Name
 
         # Getting video to show
         $video = $list.Content | where seen -ne "True" | Get-Random
@@ -128,6 +137,10 @@ foreach( $item in $lists )
         # Updating video metadata
         $video.seen = $true
         $list.Content | Export-Csv $list.FilePath -NoTypeInformation -Force -Encoding UTF8
+        if( -not ($list.Content | where seen -ne "True" | select -First 1) )
+        {
+            $stack.Children.Remove( $button )
+        }
     })
     $stack.Children.Add( $button ) | Out-Null
 }
