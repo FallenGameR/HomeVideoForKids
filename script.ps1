@@ -14,25 +14,9 @@ Add-Type -Path Tomin.Tools.KioskMode.dll
 $WinAPI = [Tomin.Tools.KioskMode.WinApi]
 $Helpers = [Tomin.Tools.KioskMode.Helper]
 
-function Get-ChromeHandle( [switch] $wait )
+function Get-ChromeHandle
 {
-    Write-Debug "peaking"
-    $window = Get-Process -Name chrome -ea Ignore | where MainWindowTitle
-
-    if( $wait )
-    {
-        while( -not $window )
-        {
-            Start-Sleep -Seconds 0.1
-            $window = Get-Process -Name chrome -ea Ignore | where MainWindowTitle
-            Write-Debug "searching"
-        }
-    }
-
-    if( $window )
-    {
-        $window.MainWindowHandle
-    }
+    Get-Process -Name chrome -ea Ignore | where MainWindowTitle | foreach MainWindowHandle
 }
 
 # Build basic form
@@ -112,21 +96,54 @@ foreach( $item in $lists )
         $txtDescription.Text = $video.title + "`r`n" + $video.description
         $scroll.Visibility = "Visible"
 
-        # Cleaning up
+        # Cleaning up previous crome instance
+        # Send Alt+F4 to browser window to exit gracefully
         Get-ChromeHandle | foreach {
             Write-Debug "killing $psitem"
             $Helpers::SendKey($psitem, '%{F4}')
-            while( Get-Process chrome -ea Ignore )
+        }
+
+        # Make sure all chrome processes did end
+        $killingStarted = [datetime]::now
+        while( Get-Process chrome -ea Ignore )
+        {
+            Write-Debug "waiting for chrome processed to be killed"
+            Start-Sleep -Seconds 0.1
+
+            if( ([datetime]::now - $killingStarted) -gt [timespan]::Parse("00:00:01") )
             {
-                Write-Debug "waiting for kill $psitem"
-                Start-Sleep -Seconds 0.1
+                # Sometimes browser process exists but other chrome processes would not unload.
+                # Ignore that situation. Chrome browser window seems to work fine after restart.
+                if( -not (Get-ChromeHandle) )
+                {
+                    Write-Debug "browser process ended but other chrome processes did not, ignoring"
+                    break
+                }
             }
         }
 
+        # Start new chrome window
+        # TODO: Sometimes browser window would not show even after it is called, retry starting
+        do
+        {
+            Write-Debug "trying to start new chrome instance"
+            Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $url"
+            $runStarted = [datetime]::now
+
+            while( -not (Get-ChromeHandle) )
+            {
+                if( ([datetime]::now - $runStarted) -gt [timespan]::Parse("00:00:05") )
+                {
+                    break
+                }
+                Start-Sleep -Seconds 0.1
+                Write-Debug "waiting chrome to start"
+            }
+        }
+        until( Get-ChromeHandle )
+
         # Show video on second monitor
-        Write-Debug "starting"
-        Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $url"
-        Get-ChromeHandle -Wait | foreach {
+        Get-ChromeHandle | foreach {
             Write-Debug "moving $psitem"
             $WinAPI::ShowWindow($psitem, [Tomin.Tools.KioskMode.Enums.ShowWindowCommands]::Restore)
             $Helpers::MoveToMonitor($psitem, 2)
@@ -151,6 +168,7 @@ $txtDescription = New-Object System.Windows.Controls.TextBlock -Property @{
     MaxWidth = "300"
     TextWrapping = "Wrap"
     Margin = "10"
+}
 
 $scroll = New-Object System.Windows.Controls.ScrollViewer -Property @{
     MaxHeight = "200"
