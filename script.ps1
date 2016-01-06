@@ -92,8 +92,11 @@ foreach( $item in $lists )
             $GLOBAL:timerStart = [datetime]::Now
         }
 
+        # Finding corresponding list
+        $list = $lists | where Name -eq $args[0].Name
+
         # Getting video to show
-        $video = $item.Content | where seen -ne "True" | Get-Random
+        $video = $list.Content | where seen -ne "True" | Get-Random
         $url = "https://www.youtube.com/embed/$($video.VideoId)?autoplay=1"
         $txtDescription.Text = $video.title + "`r`n" + $video.description
         $txtDescription.Visibility = "Visible"
@@ -122,7 +125,7 @@ foreach( $item in $lists )
 
         # Updating video metadata
         $video.seen = $true
-        $item.Content | Export-Csv $item.FilePath -NoTypeInformation -Force -Encoding UTF8
+        $list.Content | Export-Csv $list.FilePath -NoTypeInformation -Force -Encoding UTF8
     })
     $stack.Children.Add( $button ) | Out-Null
 }

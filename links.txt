@@ -4,53 +4,15 @@
     Фиксики
     Жили были первооткрыватели
     Аты баты
-
     Пора в космос
-    https://www.youtube.com/playlist?list=PLZWRqXyJ1LsA2TqSNltmB4ofJ_vFmCukJ
 
     Школа волшебства - нужно парсить список видео
     https://www.youtube.com/user/ilyalarionov/videos
 
-
-
-[Create chrome window on different monitor]
-https://alextomin.wordpress.com/2015/04/10/kiosk-mode-in-windows-chrome-on-multiple-displays/
-
-
-[Play video full screen]
-https://www.youtube.com/tv#/watch?v=VKYcJji_wYU
-After it ends auto-continue with related video.
-Better full screen controls.
-
-https://www.youtube.com/embed/YTSH1Mt59sM?autoplay=1
-After ends it shows tiles of similar videos.
-
-[Start first video from list]
-https://www.youtube.com/tv#/videoseries?list=UUpNzWUlO6PVb_v7chefBnig
-
-https://developers.google.com/youtube/v3/
-
-
-
-UUpNzWUlO6PVb_v7chefBnig
-
-
-
-GET https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken=CDIQAA&playlistId=UUpNzWUlO6PVb_v7chefBnig&fields=items%2Fsnippet%2CnextPageToken&key={YOUR_API_KEY}
- 
-
-    $formatted_request = "https://www.googleapis.com/youtube/v3/search?q=$user_input&part=snippet&key=AIzaSyCrb1f-QjPwO9w-sB6qQTNdQ-vEdjMx7Ek&order=relevance&maxResults=10";
-
-
-
-
-
-
-how to track playlist location?
-
-
-Invoke-RestMethod -uri "https://gdata.youtube.com/feeds/api/videos?v=2&q=Desired+State+Configuration+PowerShell" 
-
-
-
-
+Make sure it works with several lists
+Shortcut
+школа волшебства
+kill other instances
+what to do when all entries are seen?
+no ,aximize button
+scrollers at description area
