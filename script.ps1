@@ -96,7 +96,7 @@ foreach( $item in $lists )
         $txtDescription.Text = $video.title + "`r`n" + $video.description
         $scroll.Visibility = "Visible"
 
-        # Cleaning up previous crome instance
+        # Cleaning up previous chrome instance
         # Send Alt+F4 to browser window to exit gracefully
         Get-ChromeHandle | foreach {
             Write-Debug "killing $psitem"
@@ -108,7 +108,7 @@ foreach( $item in $lists )
         while( Get-Process chrome -ea Ignore )
         {
             Write-Debug "waiting for chrome processed to be killed"
-            Start-Sleep -Seconds 0.1
+            Start-Sleep -Seconds 0.3
 
             if( ([datetime]::now - $killingStarted) -gt [timespan]::Parse("00:00:01") )
             {
@@ -123,26 +123,27 @@ foreach( $item in $lists )
         }
 
         # Start new chrome window
-        # TODO: Sometimes browser window would not show even after it is called, retry starting
         do
         {
             Write-Debug "trying to start new chrome instance"
-            Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window $url"
+            Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' "--new-window --process-per-site $url"
             $runStarted = [datetime]::now
 
             while( -not (Get-ChromeHandle) )
             {
-                if( ([datetime]::now - $runStarted) -gt [timespan]::Parse("00:00:03") )
+                # Sometimes browser window would not show even after it is called, retry starting
+                if( ([datetime]::now - $runStarted) -gt [timespan]::Parse("00:00:04") )
                 {
                     break
                 }
-                Start-Sleep -Seconds 0.1
+                Start-Sleep -Seconds 0.3
                 Write-Debug "waiting chrome to start"
             }
         }
         until( Get-ChromeHandle )
 
         # Show video on second monitor
+        Write-Debug "trying to move window"
         Get-ChromeHandle | foreach {
             Write-Debug "moving $psitem"
             $WinAPI::ShowWindow($psitem, [Tomin.Tools.KioskMode.Enums.ShowWindowCommands]::Restore)
@@ -152,6 +153,7 @@ foreach( $item in $lists )
         }
 
         # Updating video metadata
+        Write-Debug "modifying metadata"
         $video.seen = $true
         $list.Content | Export-Csv $list.FilePath -NoTypeInformation -Force -Encoding UTF8
         if( -not ($list.Content | where seen -ne "True" | select -First 1) )
